@@ -1,6 +1,6 @@
 from rest_framework import status#, permissions, viewsets
 
-from .serializers import CustomUserSerializer, PostSerializer
+from core.serializers import CustomUserSerializer, PostSerializer, PostSerializerFull
 from rest_framework.decorators import api_view
 
 
@@ -15,7 +15,7 @@ import uuid
 
 from django.core.files import File
 
-from .models import CustomUser, Post, Follow, Item, Media, MediaItem
+from core.models import CustomUser, Post, Follow, Item, Media, MediaItem
 
 @api_view(['GET', 'POST'])
 def users(request):
@@ -81,12 +81,31 @@ def get_user_by_id(id):
         return user
     except CustomUser.DoesNotExist: 
         return None
+
+def get_user_by_username(username):
+    try: 
+        user = CustomUser.objects.get(username=username) 
+        return user
+    except CustomUser.DoesNotExist: 
+        return None
  
 @api_view(['GET'])
 def user_detail(request, id):
     # find user by id 
     # GET / PUT / DELETE user
     user = get_user_by_id(id)
+    
+    if user is None:
+        return JsonResponse({'message': 'The user does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+    
+    if request.method == 'GET': 
+        userSerializer = CustomUserSerializer(user) 
+        return JsonResponse(userSerializer.data, status=status.HTTP_200_OK) 
+
+@api_view(['GET'])
+def user_detail_by_username(request, username):
+    # GET user by username 
+    user = get_user_by_username(username)
     
     if user is None:
         return JsonResponse({'message': 'The user does not exist'}, status=status.HTTP_404_NOT_FOUND) 
@@ -341,6 +360,20 @@ def user_posts(request, id):
         return JsonResponse(data={'message': 'success'}, status=status.HTTP_201_CREATED)
         
 
+@api_view(['GET'])
+def user_posts_full(request, id):
+    # GET posts id has posted
+
+    user = get_user_by_id(id)
+        
+    if user is None:
+        return JsonResponse({'message': 'The user does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+
+    if request.method == 'GET':
+        print("user posts:", user.posts.all())
+        postSerializer = PostSerializerFull(user.posts.all().order_by('-timestamp'), many=True)
+        return JsonResponse(postSerializer.data, safe=False, status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 def user_liked_posts(request, id):
@@ -374,11 +407,15 @@ def feed(request, id):
     #TODO: this is probably illegal
     #TODO: check pagination - check if I can do it with startPosts or if I have to skip+limit.
     #Also make sure to pass the startPost to the client in json format
-    posts = (user + user.get_following())
-            .posts.
-            order_by('-timestamp')
-            .after(startPost)
-            .limit(FEED_POST_LIMIT)
+    posts = (
+        user + user.get_following()
+    ).posts.order_by(
+        '-timestamp'
+    ).after(
+        startPost
+    ).limit(
+        FEED_POST_LIMIT
+    )
 
     postSerializer = PostSerializer(posts, many=True)
     return JsonResponse(postSerializer.data, safe=False, status=status.HTTP_200_OK)
@@ -406,10 +443,13 @@ def main(request, id):
     
     #TODO: check pagination - check if I can do it with startPosts or if I have to skip+limit.
     #Also make sure to pass the startPost to the client in json format
-    posts = Post.objects.all()
-            .order_by('-num_likes')
-            .after(startPost)
-            .limit(MAIN_POST_LIMIT)
+    posts = Post.objects.all().order_by(
+        '-num_likes'
+    ).after(
+        startPost
+    ).limit(
+        MAIN_POST_LIMIT
+    )
 
     postSerializer = PostSerializer(posts, many=True)
     return JsonResponse(postSerializer.data, safe=False, status=status.HTTP_200_OK)
@@ -434,11 +474,11 @@ def follow_recommendations(request, id):
     
     #TODO: fix - or maybe just turn into a raw SQL query
     userFollowing = user.get_following()
-    users = userFollowing
-            .get_following()
-            .filter(id not in userFollowing) #this is wrong
-            .order_by("-count") #count is wrong - figure out how to count # times user appears
-            .limit(RECOMMENDED_USER_LIMIT)
+    users = userFollowing.get_following().filter(
+        id not in userFollowing #this is wrong
+    ).order_by(
+        "-count" #count is wrong - figure out how to count # times user appears
+    ).limit(RECOMMENDED_USER_LIMIT)
 
     userSerializer = UserSerializer(users, many=True)
     return JsonResponse(userSerializer.data, safe=False, status=status.HTTP_200_OK)

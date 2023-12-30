@@ -28,7 +28,7 @@ from rest_framework import routers
 from core import views
 
 router = routers.DefaultRouter()
-router.register(r'users', views.CustomUserViewSet)
+#router.register(r'users', views.CustomUserViewSet)
 #router.register(r'groups', views.GroupViewSet)
 
 # Wire up our API using automatic URL routing.

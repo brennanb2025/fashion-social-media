@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #ffffff;
+    color: #292929;
+    border-bottom: 1px solid #000; /* Add bottom border */
+    border-left: 1px solid #000; /* Add left border */
+    border-right: 1px solid #000; /* Add right border */
+    border-top: none; /* Remove top border */
+    border-bottom-left-radius: 25px; /* Add rounded edges to top-left corner */
+    border-bottom-right-radius: 25px; /* Add rounded edges to top-right corner */
+    width:80%;
+    margin: 0 auto; /* Center the navbar horizontally */
+}
+
+.logo a {
+    text-decoration: none;
+    color: #262626;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #262626;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.links a:hover {
+    color: #68d391; /* Change to your desired hover color */
+}
+  

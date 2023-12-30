@@ -20,7 +20,6 @@ followers = Table('followers',
     followed_id = Column(Integer, ForeignKey("users.id"), primary_key=True))
 """
 
-#TODO: renamed to Follow
 class Follow(models.Model): 
     #__tablename__ = "followers"
 
@@ -45,18 +44,13 @@ def file_generate_upload_path_profile_picture(instance, filename): #instance = a
     return f"profile_pictures/{instance.id}/{filename}" 
 
 class CustomUser(AbstractUser):
-    #__tablename__ = "user"
-
-    #id = Column(Integer, primary_key=True, index=True)
     email = models.EmailField(max_length=70,blank=True,unique=True)
-    #username = Column(String, unique=True, index=True)
-    #hashed_password = Column(String)
-    #is_active = Column(Boolean, default=True)
-    #timestamp = Column(DateTime(timezone=True), index=True, server_default=func.now())
+    bio = models.CharField(max_length=200, blank=True, default='')
+    height = models.CharField(max_length=10, null=True) #optional
+    weight = models.PositiveSmallIntegerField(null=True) #optional
 
     #posts = relationship("Posts", back_populates="owner")
 
-    # TODO: Added this
     profile_picture = models.FileField(
         upload_to=file_generate_upload_path_profile_picture, 
         null=True #optional
@@ -86,9 +80,7 @@ def file_generate_upload_path_media(instance, filename): #instance = actual imag
     return f"post_media/{instance.post.owner.id}/{filename}" 
 
 class Media(models.Model):
-    #__tablename__ = "media"
 
-    #id = Column(Integer, primary_key=True, index=True)
     bucket_key = models.FileField(upload_to=file_generate_upload_path_media)
     index = models.PositiveSmallIntegerField()
     post = models.ForeignKey(
@@ -101,11 +93,8 @@ class Media(models.Model):
     items = models.ManyToManyField("Item", through="MediaItem")
 
 class Item(models.Model):
-    #__tablename__ = "items"
 
-    #id = Column(Integer, primary_key=True, index=True)
     title = models.CharField(max_length=100)
-
     brand = models.CharField(max_length=100)
 
     #I don't want different Item entries for every different colorway... put that in MediaItem
@@ -118,9 +107,6 @@ class Item(models.Model):
 
 
 class MediaItem(models.Model):
-    #__tablename__ = "mediaItems"
-
-    #id = Column(Integer, primary_key=True)
 
     post = models.ForeignKey(
             "Post", 
@@ -130,7 +116,6 @@ class MediaItem(models.Model):
             "Media", 
             related_name="mediaItems",
             on_delete=models.CASCADE) #CASCADE means delete this row when media is deleted.
-    #media_id = Column(Integer, ForeignKey('media.id'))
     item = models.ForeignKey(
             "Item", 
             related_name="mediaItems",
@@ -144,12 +129,8 @@ class MediaItem(models.Model):
 
 
 class Post(models.Model):
-    #__tablename__ = "posts"
-
-    #id = Column(Integer, primary_key=True, index=True)
     title = models.CharField(max_length=100)
     caption = models.CharField(max_length=1000)
-    #owner_id = Column(Integer, ForeignKey("users.id"))
     owner = models.ForeignKey(
             "CustomUser", 
             related_name="posts",
@@ -157,16 +138,11 @@ class Post(models.Model):
             #CASCADE means delete this row when user is deleted.
 
     timestamp = models.DateTimeField(auto_now_add=True)
-    #Column(DateTime(timezone=True), index=True, server_default=func.now())
     num_likes = models.IntegerField(default=0)
 
     #I want to get the timestamps of each PostLike - so maybe I don't need this?
     #if I have to get the PostLike objects anyway?
     #user_likes = models.ManyToManyField("User", through="PostLike")
-
-    #owner = models.ForeignKey(User, back_populates="posts")
-    #media = relationship("media", back_populates="posts")
-    #comments = relationship("comments", back_populates="posts")
 
     def increment_likes(self):
         self.num_likes += 1
@@ -177,25 +153,17 @@ class Post(models.Model):
 #------------------ user comments and likes ------------------
 
 class Comment(models.Model): 
-    #__tablename__ = "comments"
-
-    #id = Column(Integer, primary_key=True, index=True)
-    #post_id = Column(Integer, ForeignKey('posts.id'))
 
     post = models.ForeignKey(
             "Post", 
             related_name="comments",
             on_delete=models.CASCADE)
-
-    #parent_comment_id = Column(Integer, ForeignKey('comments.id')) #will be null if top-level comment
     parent_comment = models.ForeignKey(
             "Comment", 
             related_name="comments",  #will be null if top-level comment
             on_delete=models.CASCADE)
             #parent comment is deleted --> this one is deleted too.
             #in the future we should just set the parent comment's text to null to "delete" it.
-
-    #user_id = Column(Integer, ForeignKey('users.id'))
     user = models.ForeignKey(
             "CustomUser", 
             related_name="comments",
@@ -207,7 +175,6 @@ class Comment(models.Model):
             #The comment will remain even if the poster is deleted.
     
     timestamp = models.DateTimeField(auto_now_add=True)
-    #Column(DateTime(timezone=True), index=True, server_default=func.now())
     content = models.CharField(max_length=500)
     num_likes = models.IntegerField(default=0)
 
@@ -219,17 +186,11 @@ class Comment(models.Model):
 
 
 class CommentLike(models.Model):
-    #__tablename__ = "commentLikes"
-
-    #id = Column(Integer, primary_key=True, index=True)
-    #comment_id = Column(Integer, ForeignKey('comments.id'))
 
     comment = models.ForeignKey( #probably don't need relation field from users?
             "Comment",
             related_name="likes",
             on_delete=models.CASCADE) #delete likes if comment gets deleted.
-
-    #user_id = Column(Integer, ForeignKey('users.id'))
     user = models.ForeignKey( #probably don't need related name?
             "CustomUser",
             related_name="comment_likes",
@@ -242,22 +203,15 @@ class CommentLike(models.Model):
             #These are just for making sure one user doesn't like stuff multiple times.
             #If the user gets deleted, what's the point.
 
-    # TODO: Added
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class PostLike(models.Model):
-    #__tablename__ = "postLikes"
-
-    #id = Column(Integer, primary_key=True, index=True)
-    #post_id = Column(Integer, ForeignKey('posts.id'))
 
     post = models.ForeignKey(
             "Post", 
             related_name="likes",
             on_delete=models.CASCADE) #post gets deleted = likes get deleted.
-
-    #user_id = Column(Integer, ForeignKey('users.id'))
     user = models.ForeignKey(
             "CustomUser",
             related_name="post_likes",
@@ -269,7 +223,6 @@ class PostLike(models.Model):
             #These are just for making sure one user doesn't like stuff multiple times.
             #If the user gets deleted, what's the point.
 
-    # TODO: Added
     timestamp = models.DateTimeField(auto_now_add=True)
 
 

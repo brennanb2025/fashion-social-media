@@ -1,9 +1,9 @@
 
-from .serializers import CustomUserSerializer, PostSerializer, FollowsSerializer, CommentSerializer#, GroupSerializer
+from core.serializers import CustomUserSerializer, PostSerializer, FollowSerializer, CommentSerializer#, GroupSerializer
 from django.http.response import JsonResponse
 from rest_framework import status
 
-from .models import CustomUser, Post, Follow, Item, Media, MediaItem, PostLike, Comment
+from core.models import CustomUser, Post, Follow, Item, Media, MediaItem, PostLike, Comment
 from rest_framework.decorators import api_view
 
 from .users import get_user_by_id

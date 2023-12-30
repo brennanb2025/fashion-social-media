@@ -1,0 +1,8 @@
+.carouselImage {
+    width: 200px; /* Set the width to 400 pixels */
+    max-width: 200px;
+    height: 200px; /* Set the height to 400 pixels */
+    max-height: 200px;
+    object-fit: cover; /* Ensure the image covers the entire container */
+    object-position: center center; /* Center the image horizontally and vertically */
+}

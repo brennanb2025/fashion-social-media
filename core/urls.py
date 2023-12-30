@@ -1,13 +1,15 @@
 from django.urls import path
-from core import views 
+from core import views
 
 """ 
 Users
 /api/users/: GET, POST
 /api/users/:id/: GET
+/api/users/:username/: GET
 /api/users/:id/followers/: GET
 /api/users/:id/following/: GET
 /api/users/:id/posts/: GET, POST
+/api/users/:id/posts-full/: GET
 /api/users/:id/likedPosts/: GET
 /api/users/:id1/follow/:id2/: POST
 /api/users/:id1/unfollow/:id2/: DELETE
@@ -45,14 +47,17 @@ Comments
 
 
 """
+#app_name = 'core'
 
 urlpatterns = [ 
     #users
     path('api/users/', views.users, name='users'),
     path('api/users/<int:id>/', views.user_detail, name='user_detail'),
+    path('api/users/<str:username>/', views.user_detail_by_username, name='user_detail_by_username'),
     path('api/users/<int:id>/followers/', views.user_followers, name='user_followers'),
     path('api/users/<int:id>/following/', views.user_following, name='user_following'),
     path('api/users/<int:id>/posts/', views.user_posts, name='user_posts'),
+    path('api/users/<int:id>/posts-full/', views.user_posts_full, name='user_posts_full'),
     path('api/users/<int:id>/likedPosts/', views.user_liked_posts, name='user_liked_posts'),
     path(
             'api/users/<int:id1>/follow/<int:id2>/', 
@@ -80,7 +85,7 @@ urlpatterns = [
             name='follow-recommendations'
         ),
     path(
-        '/api/users/<int:id>/set-profile-picture/',
+        'api/users/<int:id>/set-profile-picture/',
         views.set_profile_picture,
         name='set-profile-picture'
     ),
@@ -97,17 +102,17 @@ urlpatterns = [
     path('api/posts/<int:id>/like/<int:userid>/', views.post_like, name='post_like'),
     path('api/posts/<int:id>/comment<int:userid>/', views.post_comment, name='post_comment'),
     path('api/posts/<int:id>/comments/', views.post_comments, name='post_comments'),
-    path('api/posts/containing-item-brand/<string:brand>/', 
+    path('api/posts/containing-item-brand/<str:brand>/', 
         views.posts_containing_item_brand,
         name='posts_containing_item_brand'
     ),
 
 
     #Items
-    path('/api/items/', views.items, name='items'),
-    path('/api/items/<int:id>/', views.item_detail, name='item_detail'),
-    path('/api/items/<int:id>/posts/', views.item_posts, name='item_posts'),
-    path('/api/items/by-brand/<string:brand>/', views.items_by_brand, name='items_by_brand'),
+    path('api/items/', views.items, name='items'),
+    path('api/items/<int:id>/', views.item_detail, name='item_detail'),
+    path('api/items/<int:id>/posts/', views.item_posts, name='item_posts'),
+    path('api/items/by-brand/<str:brand>/', views.items_by_brand, name='items_by_brand'),
 
 
     #comments

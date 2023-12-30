@@ -26,4 +26,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 
-from .core.views import follows, posts, users
+#from core.views import follows, posts, users
+#import core.views.follows
+#import core.view.posts
+#import core.views.users

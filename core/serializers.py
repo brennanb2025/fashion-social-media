@@ -1,30 +1,17 @@
 #from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
-from .models import CustomUser, Post, Follow, Comment, Item
+from .models import CustomUser, Post, Follow, Comment, Item, Media, MediaItem
 
 class CustomUserSerializer(serializers.ModelSerializer):
     #followers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_active']
+        fields = ['id', 'username', 'email', 'first_name', 
+            'last_name', 'bio', 'height', 'weight', 'profile_picture', 'is_active']
+
 
 class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = ['id', 'title', 'caption', 'owner', 'timestamp', 'num_likes']
-
-#TODO: make this have field:
-# itemInformation: [Item, Item, Item]
-# where Item has:
-# - item_position_percent_x (from MediaItem)
-# - item_position_percent_y (from MediaItem)
-# - colorway (from MediaItem)
-# - link (from MediaItem)
-# - title (from Item)
-# - brand (from Item)
-# - item_type (from Item)
-class PostSerializerFull(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'caption', 'owner', 'timestamp', 'num_likes']
@@ -33,6 +20,30 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['id', 'brand', 'item_type']
+
+class MediaItemSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
+
+    class Meta:
+        model = MediaItem
+        fields = ['id', 'item_position_percent_x', 'item_position_percent_y', 
+                'colorway', 'link', 'item']
+
+class MediaSerializer(serializers.ModelSerializer):
+    mediaItems = MediaItemSerializer(many=True)
+
+    class Meta:
+        model = Media
+        fields = ['id', 'bucket_key', 'index', 'mediaItems']
+
+class PostSerializerFull(serializers.ModelSerializer):
+    media = MediaSerializer(many=True)
+
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'caption', 'owner', 'timestamp', 'num_likes', 'media']
+
+
 
 class FollowSerializer(serializers.ModelSerializer):
     class Meta:
