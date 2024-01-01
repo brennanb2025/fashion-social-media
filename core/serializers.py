@@ -19,7 +19,7 @@ class PostSerializer(serializers.ModelSerializer):
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['id', 'brand', 'item_type']
+        fields = ['id', 'title', 'brand', 'item_type']
 
 class MediaItemSerializer(serializers.ModelSerializer):
     item = ItemSerializer()

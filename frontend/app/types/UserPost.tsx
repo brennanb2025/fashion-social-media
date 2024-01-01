@@ -39,3 +39,12 @@ export type MediaItem = {
     item: Item,
     media: Media,
 };
+
+export interface ImageCarouselProps {
+    userPost: UserPost;
+}
+
+export interface MarkerProps {
+    x: number;
+    y: number;
+}

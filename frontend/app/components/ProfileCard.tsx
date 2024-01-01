@@ -47,22 +47,24 @@ export const ProfileCard = ({user} : UserProps ) => {
     return (
         <div className={globalStyles.text1}>
             <div className={styles.profileCard}>
-                <div className={styles.profilePictureContainer}>
-                    <img
-                        src={user.profile_picture}
-                        alt={`${user.first_name} ${user.last_name}`}
-                        className={styles.profilePicture}
-                    />
+                <div>
+                    <div className={styles.profilePictureContainer}>
+                        <img
+                            src={user.profile_picture}
+                            alt={`${user.first_name} ${user.last_name}`}
+                            className={styles.profilePicture}
+                        />
+                    </div>
+                    <div className={styles.userInfo}>
+                        <h2>{`${user.first_name} ${user.last_name}`}</h2>
+                        <Link href={`/profile/${user.username}`}>
+                            @{user.username}
+                        </Link>
+                        <p>{user.bio}</p>
+                        <p>{`${user.height}, ${user.weight} lbs`}</p>
+                    </div>
                 </div>
-                <div className={styles.userInfo}>
-                    <h2>{`${user.first_name} ${user.last_name}`}</h2>
-                    <Link href={`/profile/${user.username}`}>
-                        @{user.username}
-                    </Link>
-                    <p>{user.bio}</p>
-                    <p>{`${user.height}, ${user.weight} lbs`}</p>
-                </div>
-                <div className="text-center">
+                <div className="">
                     <UserPostGrid id={user.id} />
                 </div>
             </div>
