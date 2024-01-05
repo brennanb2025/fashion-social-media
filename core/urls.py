@@ -25,8 +25,9 @@ Posts
 /api/posts/: GET
 /api/posts/:id/: GET
 /api/posts/:id/likes/: GET
-/api/posts/:id/like/:userid/: POST
-/api/posts/:id/comment/:userid: POST
+/api/posts/:id/num_likes/: GET
+/api/posts/:id/like/:userid/: GET, POST
+/api/posts/:id/comment/: POST
 /api/posts/:id/comments/: GET
 /api/posts/containing-item-brand/:brand/: GET
 
@@ -99,8 +100,9 @@ urlpatterns = [
     path('api/posts/', views.posts, name='posts'),
     path('api/posts/<int:id>/', views.post_detail, name='post_detail'),
     path('api/posts/<int:id>/likes/', views.post_likes, name='post_likes'),
+    path('api/posts/<int:id>/num_likes/', views.post_num_likes, name='post_num_likes'),
     path('api/posts/<int:id>/like/<int:userid>/', views.post_like, name='post_like'),
-    path('api/posts/<int:id>/comment<int:userid>/', views.post_comment, name='post_comment'),
+    path('api/posts/<int:id>/comment/', views.post_comment, name='post_comment'),
     path('api/posts/<int:id>/comments/', views.post_comments, name='post_comments'),
     path('api/posts/containing-item-brand/<str:brand>/', 
         views.posts_containing_item_brand,
@@ -111,6 +113,7 @@ urlpatterns = [
     #Items
     path('api/items/', views.items, name='items'),
     path('api/items/<int:id>/', views.item_detail, name='item_detail'),
+    path('api/items/<str:title>/', views.item_detail_by_title, name='item_detail_by_title'),
     path('api/items/<int:id>/posts/', views.item_posts, name='item_posts'),
     path('api/items/by-brand/<str:brand>/', views.items_by_brand, name='items_by_brand'),
 
@@ -121,7 +124,7 @@ urlpatterns = [
     path('api/comments/<int:id>/comments/', views.comment_comments, name='comment_comments'),
     path('api/comments/<int:id>/like/<int:userid>/', views.comment_like, name='comment_like'),
     path('api/comments/<int:id>/comment/<int:userid>/<int:postid>/', 
-        views.post_comment, 
+        views.post_comment,  #TODO: Change
         name='post_comment'
     ),
 ]

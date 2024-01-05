@@ -351,6 +351,7 @@ def user_posts(request, id):
                     post=newPost,
                     media=newMedia,
                     item=thisItem,
+                    size=(item['size'] if item['size'] != "" else None), #optional
                     item_position_percent_x=int(item['x_percent_pos']),
                     item_position_percent_y=int(item['y_percent_pos']),
                     colorway=(item['colorway'] if item['colorway'] != "" else None), #optional

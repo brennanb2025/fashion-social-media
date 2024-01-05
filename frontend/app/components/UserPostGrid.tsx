@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import globalStyles from '../styles/myGlobals.module.css';
 import axios from 'axios';
-import { UserPost } from '../types/UserPost';
-import { UserPostGridProps } from '../types/UserPost';
-import ImageCarousel from './PostImageCarousel';
+import { UserPost, UserPostBarProps, UserPostGridProps } from '../types/UserPost';
+import PostImageCarousel from './PostImageCarousel';
+import PostBar from './PostBar';
 import styles from '../styles/userPostGrid.module.css'
 
 const UserPostGrid: React.FC<UserPostGridProps> = ({ id }) => {
@@ -26,7 +26,10 @@ const UserPostGrid: React.FC<UserPostGridProps> = ({ id }) => {
         <div className={`card ${styles.card}`}>
           <div className={`card-body ${styles.cardBody}`}>
             <h5 className={`card-title ${styles.cardTitle}`}>{post.title}</h5>
-            <ImageCarousel userPost={post} />
+            <PostImageCarousel userPost={post} />
+            <h5 className={styles.cardCaption}>{post.caption}</h5>
+            <h5 className={styles.cardTimestamp}>{post.timestamp}</h5>
+            <PostBar post={post} userid={id} />
           </div>
         </div>
       </div>

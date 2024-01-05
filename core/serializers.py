@@ -27,7 +27,7 @@ class MediaItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaItem
         fields = ['id', 'item_position_percent_x', 'item_position_percent_y', 
-                'colorway', 'link', 'item']
+                'colorway', 'link', 'item', 'size']
 
 class MediaSerializer(serializers.ModelSerializer):
     mediaItems = MediaItemSerializer(many=True)

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 //import Modal from "./components/Modal";
 import axios from "axios";
+import { User } from "../types/User";
 
 import globalStyles from '../styles/myGlobals.module.css';
 

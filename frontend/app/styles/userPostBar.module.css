@@ -1,0 +1,44 @@
+.postBar {
+    padding: 8px;
+    border-top: 1px solid #ccc; /* Add a border to separate the post content and the bar */
+}
+
+.comments {
+    margin-top: 8px;
+}
+
+.likePostButton:hover {
+    cursor: pointer;
+}
+
+.likedPostHeart {
+    color: #f576ee;
+}
+
+.commentInputContainer {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.commentInput {
+    flex: 1; /* Take up remaining space */
+    padding: 8px;
+    margin-right: 4px;
+    border: none; /* Remove the border */
+    outline: none; /* Remove the outline */
+    border-bottom: 1px solid #888888;
+}
+  
+.commentButton {
+    width: 40px; /* Probably not the best to have this hardcoded */
+    height: 100%; 
+    padding: 8px;
+    background-color: transparent;
+    color: #474747;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}

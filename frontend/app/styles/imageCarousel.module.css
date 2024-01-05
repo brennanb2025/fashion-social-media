@@ -38,25 +38,30 @@
     padding-left:5px;
     flex: 1; /* Equal width for both columns */
     margin: 5px;
-    width: 0%;
+    width: 0;
     opacity: 0; /* Initially hide the marker */
-    transition: opacity 0.3s visibility 0.3s ease, width 0.3s ease; /* Add a transition for opacity */
+    transition: opacity 0.3s visibility 0.3s ease, width 0.3s; /* Add a transition for opacity */
 }
 
 .hovered .itemsCol {
-    width:100%;
+    width: auto;
     opacity: 1;
     visibility: visible;
 }
 
-
+.markerInvisibleDummy {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    opacity: 0;
+}
 .marker {
     position: absolute;
     width: 15px;
     height: 15px;
-    background-color: rgb(210, 210, 210);
+    background-color: #d1d1d1;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    /* transform: translate(-50%, -50%); */
     opacity: 0; /* Initially hide the marker */
     transition: opacity 0.3s; /* Add a transition for opacity */
 }
@@ -64,7 +69,7 @@
     position: absolute;
     width: 10px;
     height: 10px;
-    background-color: rgb(152, 152, 152);
+    background-color: #757575;
     border-radius: 50%;
     transform: translate(25%, 25%);
     opacity: 0; /* Initially hide the marker */
@@ -74,6 +79,13 @@
     opacity: 1;
 }
 .hovered .markerInner {
+    opacity: 1;
+}
+.arrow {
+    opacity: 0;
+    transition: opacity 0.3s; /* Add a transition for opacity */
+}
+.hovered .arrow {
     opacity: 1;
 }
 

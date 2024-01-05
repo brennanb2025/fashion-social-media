@@ -36,9 +36,30 @@ export type MediaItem = {
     item_position_percent_y: number,
     colorway: string,
     link: string,
+    size: string,
     item: Item,
     media: Media,
 };
+
+//TODO: must double check
+export type PostComment = {
+    id: number,
+    post: number, 
+    parent_comment: number, 
+    user: number, 
+    timestamp: string, 
+    content: string, 
+    num_likes: number,
+}
+
+export type PostNumLikes = {
+    num_likes: number,
+}
+
+export type PostLikedByUserStatus = {
+    status: boolean,
+}
+
 
 export interface ImageCarouselProps {
     userPost: UserPost;
@@ -47,4 +68,9 @@ export interface ImageCarouselProps {
 export interface MarkerProps {
     x: number;
     y: number;
+}
+
+export interface UserPostBarProps {
+    post: UserPost;
+    userid: number;
 }

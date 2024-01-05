@@ -123,6 +123,7 @@ class MediaItem(models.Model):
 
     item_position_percent_x = models.PositiveSmallIntegerField()
     item_position_percent_y = models.PositiveSmallIntegerField()
+    size = models.CharField(max_length=30, null=True) #optional
 
     colorway = models.CharField(max_length=100, null=True) #optional
     link = models.URLField(null=True) #optional
@@ -146,9 +147,11 @@ class Post(models.Model):
 
     def increment_likes(self):
         self.num_likes += 1
+        self.save()
     
     def decrement_likes(self):
         self.num_likes -= 1
+        self.save()
 
 #------------------ user comments and likes ------------------
 
@@ -160,7 +163,8 @@ class Comment(models.Model):
             on_delete=models.CASCADE)
     parent_comment = models.ForeignKey(
             "Comment", 
-            related_name="comments",  #will be null if top-level comment
+            related_name="comments",  
+            null=True, #will be null if top-level comment
             on_delete=models.CASCADE)
             #parent comment is deleted --> this one is deleted too.
             #in the future we should just set the parent comment's text to null to "delete" it.
@@ -180,9 +184,11 @@ class Comment(models.Model):
 
     def increment_likes(self):
         self.num_likes += 1
+        self.save()
     
     def decrement_likes(self):
         self.num_likes -= 1
+        self.save()
 
 
 class CommentLike(models.Model):

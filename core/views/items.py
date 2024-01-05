@@ -1,5 +1,5 @@
 
-from core.serializers import PostSerializer, ItemSerializer#, GroupSerializer
+from core.serializers import PostSerializer, PostSerializerFull, ItemSerializer#, GroupSerializer
 from django.http.response import JsonResponse
 from rest_framework import status
 
@@ -10,6 +10,13 @@ from rest_framework.decorators import api_view
 def get_item_by_id(id):
     try: 
         item = Item.objects.get(id=id) 
+        return item
+    except Item.DoesNotExist: 
+        return None
+
+def get_item_by_title(title):
+    try: 
+        item = Item.objects.get(title=title) 
         return item
     except Item.DoesNotExist: 
         return None
@@ -43,7 +50,19 @@ def item_detail(request, id):
     if item is None:
         return JsonResponse({'message': 'The item does not exist'}, status=status.HTTP_404_NOT_FOUND) 
     
-    itemSerializer = ItemSerializer(post)
+    itemSerializer = ItemSerializer(item)
+    return JsonResponse(itemSerializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def item_detail_by_title(request, title):
+    # GET post by id
+
+    item = get_item_by_title(title)
+    
+    if item is None:
+        return JsonResponse({'message': 'The item does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+    
+    itemSerializer = ItemSerializer(item)
     return JsonResponse(itemSerializer.data, status=status.HTTP_200_OK)
 
 
@@ -59,7 +78,10 @@ def item_posts(request, id):
     # item -> media (via item.media_set I think) -> posts
     # TODO: pretty sure this is wrong
     # may have to be: [m.post for m in item.media_set.all()]
-    posts = item.media_set.all().posts.all()
+    #print(item.media_set.all())
+    #medias = item.media_set.all()
+    #posts = post.objects.filter(media_)
+    posts = Post.objects.filter(mediaItems__item=item).distinct()
 
-    postSerializer = PostSerializer(posts, many=True)
+    postSerializer = PostSerializerFull(posts, many=True)
     return JsonResponse(postSerializer.data, safe=False, status=status.HTTP_200_OK)

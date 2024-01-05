@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { ProfileCard } from "../../components/ProfileCard"
+import MakePostCard from '../../components/MakePostCard';
 import { User } from "../../types/User";
 import { Navbar } from '../../components/Navbar'
 
 import axios from 'axios';
 
-export default function Profile({ params }: { params: { username: string } }) {
+export default function Post({ params }: { params: { username: string } }) {
 
     // const user: User = {
     //     id: 1,
@@ -37,7 +37,7 @@ export default function Profile({ params }: { params: { username: string } }) {
     return (
         <div>
             <Navbar />
-            {user ? <ProfileCard user={user} /> : "User not found" }
+            {user ? <MakePostCard id={ user.id } /> : "User not found" }
         </div>
     )
 }
