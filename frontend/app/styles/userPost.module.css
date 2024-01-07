@@ -17,8 +17,8 @@
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
-    width: 500px;
-    height: auto;
+    width: 600px;
+    height: 800px;
 }
   
 /*.post:hover {

@@ -1,26 +1,63 @@
 .carouselContainer {
-    border: 1px solid blue;
-    height: 400px; /* Set a fixed height for the container */
+    /* border: 1px solid blue; */
+    height: 600px; /* Set a fixed height for the container */
+    margin-bottom: 30px;
 }
 
 .carouselImage {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensure the image covers the entire container */
+    max-height: 570px; /* ugh, this is disgusting. 100% doesn't seem to be working. */
+    object-fit: contain; /* Ensure the image covers the entire container */
     object-position: center center; /* Center the image horizontally and vertically */
-    margin: auto;
 }
 
 .mediaContainer {
+    /* border: 1px solid orange; */
     position: relative;
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+    /* object-position: center center; Center the image horizontally and vertically */
 }
 
+.imageMarkerRelativeLocator {
+    /* border: 1px dashed yellow; */
+    position: relative;
+    max-height: 100%;
+    object-position: center center; /* Center the image horizontally and vertically */
+}
+
+/* show each itemRow when showMarkers */
 .itemRow {
     padding: 4px;
     border: 1px solid #ddd;
     border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.3s; /* Add a transition for opacity */
+}
+
+.showMarkers .itemRow {
+    opacity: 1;
+}
+
+.mediaCol {
+    height: 100%;
+    width: 100%;
+    /* border: 1px solid black; */
+    display: flex;
+    /* justify-content: space-between; */
+    /* align-items: center; Vertical center alignment */
+    margin: 5px;
+}
+
+.mediaRow {
+    height: 100%;
+    width: 100%;
+    flex: 1; /* Equal width for both columns */
+    /* border: 1px solid brown; */
 }
 
 .mediaItems {
@@ -31,19 +68,15 @@
     grid-auto-rows: max-content; /* Allow rows to adjust height based on content */
 }
 
-.mediaCol {
-    height: 100%;
-    border: 1px solid black;
-    flex: 1; /* Equal width for both columns */
-    margin: 5px;
-}
-
 .itemsCol {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     /* visibility: hidden; */
+    height: 100%;
+    overflow-y: auto; /* Add this line to enable vertical scrolling */
     padding-left:5px;
     flex: 0; /* Equal width for both columns */
     margin: 5px;
+    margin-left: 15px;
     width: 0;
     opacity: 0; /* Initially hide the marker */
     transition: opacity 0.3s, flex 0.3s, width 0.3s; /* Add a transition for opacity */
@@ -87,6 +120,15 @@
 /*.hovered*/.showMarkers .markerInner {
     opacity: 1;
 }
+
+/* Do show the markers even when itemInfo is out of view */
+/* .showMarkers .outOfView .marker {
+    opacity: 0;
+}
+.showMarkers .outOfView .markerInner {
+    opacity: 0;
+} */
+
 .arrow {
     opacity: 0;
     transition: opacity 0.3s; /* Add a transition for opacity */
@@ -94,19 +136,36 @@
 /*.hovered*/.showMarkers .arrow {
     opacity: 1;
 }
+.showMarkers .outOfView .arrow {
+    opacity: 0;
+}
 
 .imageContainer {
     width: 100%;
-    height: 100%;
+    height: 580px;
     position: relative;
     /* display: inline-block; */
     display: flex;
-    flex-direction: column; /* Arrange columns horizontally */
+    align-items: center; /* Center vertically - not working */
+    justify-content: center; /* Center horizontally */
+    flex-direction: row; /* Arrange columns horizontally */
     margin-bottom: 20px; /* Adjust as needed for spacing between items */
+    /* border: 1px dashed green; */
 }
 
-.mediaRow {
-    height: 100%;
+/* define my own slick-slide class */
+.mySlickSlide :global(.slick-slide) {
+    /* border: 1px dashed black; */
+    width: 400px;
+    height: 600px;
+}
+.mySlickSlide .slick-slide {
+    height: 100%; 
+}
+.mySlickSlide .slick-track {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    height: 100%;
 }

@@ -15,6 +15,8 @@ import { User } from '@/app/types/User';
 export default function SearchBrand({ params }: { params: { name: string } }) {
   const [posts, setPosts] = useState<UserPost[]>([]);
   const [items, setItems] = useState<Item[]>([]);
+
+  //TODO: fix user
   const user = {
     id:1,
     profile_picture:'https://fsm-app-bucket.s3.amazonaws.com/post_media/1/07f48359-c5ac-4824-a18e-1f5b8cf12818',
