@@ -65,7 +65,7 @@ export const ProfileCard = ({user} : UserProps ) => {
                     </div>
                 </div>
                 <div className="">
-                    <UserPostGrid id={user.id} />
+                    <UserPostGrid user={user} />
                 </div>
             </div>
         </div>

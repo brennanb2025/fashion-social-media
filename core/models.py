@@ -182,6 +182,10 @@ class Comment(models.Model):
     content = models.CharField(max_length=500)
     num_likes = models.IntegerField(default=0)
 
+    @property
+    def num_comment(self):
+        return self.comments.count
+
     def increment_likes(self):
         self.num_likes += 1
         self.save()
@@ -189,6 +193,11 @@ class Comment(models.Model):
     def decrement_likes(self):
         self.num_likes -= 1
         self.save()
+
+    def __repr__(self):
+        return "Post id " + str(self.post.id) + ", parent comment id " + str(self.parent_comment.id) + \
+                ", user id " + str(self.user.id) + ", timestamp " + \
+                str(self.timestamp) + ", content " + self.content + ", num_likes " + str(self.num_likes)
 
 
 class CommentLike(models.Model):
@@ -210,6 +219,10 @@ class CommentLike(models.Model):
             #If the user gets deleted, what's the point.
 
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __repr__(self):
+        return "Comment id " + str(self.comment.id) + ", user id " + str(self.user.id) + \
+                ", timestamp " + str(self.timestamp)
 
 
 class PostLike(models.Model):

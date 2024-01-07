@@ -8,11 +8,19 @@ import { Navbar } from '@/app/components/Navbar';
 import PostImageCarousel from '@/app/components/PostImageCarousel';
 import PostBar from '@/app/components/PostBar';
 import styles from '@/app/styles/userPostGrid.module.css'
+import Post from '@/app/components/Post';
 import Link from 'next/link';
+import { User } from '@/app/types/User';
 
 export default function SearchItem({ params }: { params: { id: number } }) {
   const [posts, setPosts] = useState<UserPost[]>([]);
   const [item, setItem] = useState<Item>({} as Item);
+
+  //TODO: fix user
+  const user = {
+    id:1,
+    profile_picture:'https://fsm-app-bucket.s3.amazonaws.com/post_media/1/07f48359-c5ac-4824-a18e-1f5b8cf12818',
+  } as User
 
   const fetchPosts = () => {
     axios.get<UserPost[]>(`http://localhost:8000/api/items/${params.id}/posts/`)
@@ -32,18 +40,7 @@ export default function SearchItem({ params }: { params: { id: number } }) {
 
   const renderPosts = () => {
     return posts.map((post) => (
-      <div key={post.id} className={styles.post}>
-        <div className={`card ${styles.card}`}>
-          <div className={`card-body ${styles.cardBody}`}>
-            <h5 className={`card-title ${styles.cardTitle}`}>{post.title}</h5>
-            <PostImageCarousel userPost={post} />
-            <h5 className={styles.cardCaption}>{post.caption}</h5>
-            <h5 className={styles.cardTimestamp}>{post.timestamp}</h5>
-            <PostBar post={post} userid={1} /> 
-            {/* TODO: userid */}
-          </div>
-        </div>
-      </div>
+      <Post user={ user } post={ post } />
     ));
   };
 

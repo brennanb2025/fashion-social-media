@@ -51,10 +51,13 @@ class FollowSerializer(serializers.ModelSerializer):
         fields = ['id', 'follower', 'followed', 'timestamp']
 
 class CommentSerializer(serializers.ModelSerializer):
+    num_children = serializers.ReadOnlyField()
+
     class Meta:
         model = Comment
         # TODO: may need nested serializer for post, parent_comment, user
-        fields = ['id', 'post', 'parent_comment', 'user', 'timestamp', 'content', 'num_likes']
+        fields = ['id', 'post', 'parent_comment', 'user', 'timestamp', 'content', 
+                'num_likes', 'num_children']
 
 """
 class GroupSerializer(serializers.ModelSerializer):

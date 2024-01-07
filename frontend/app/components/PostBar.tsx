@@ -9,8 +9,9 @@ import axios from 'axios';
 import { UserPost, PostComment, PostNumLikes, UserPostBarProps, PostLikedByUserStatus } from '../types/UserPost';
 import { SuccessResult } from "../types/Generic";
 import styles from '../styles/userPostBar.module.css'
+import Comment from "./Comment";
 
-const PostBar: React.FC<UserPostBarProps> = ({ post, userid }) => {
+const PostBar: React.FC<UserPostBarProps> = ({ post, user }) => {
   const [postComments, setPostComments] = useState<PostComment[]>([]);
   const [postNumLikes, setPostNumLikes] = useState<number>(0); //default to 0?
   //const [postLikeResult, setPostLikeResult] = useState<string>("");
@@ -28,14 +29,14 @@ const PostBar: React.FC<UserPostBarProps> = ({ post, userid }) => {
       .catch((err) => console.log(err));
   };
   const fetchPostUserLiked = () => {
-    axios.get<PostLikedByUserStatus>(`http://localhost:8000/api/posts/${post.id}/like/${userid}/`)
+    axios.get<PostLikedByUserStatus>(`http://localhost:8000/api/posts/${post.id}/like/${user.id}/`)
       .then((res) => setPostIsLikedByUser(res.data.status))
       .catch((err) => console.log(err));
   }
 
   const likePost = () => {
     //post this like under id userid
-    axios.post<SuccessResult>(`http://localhost:8000/api/posts/${post.id}/like/${userid}/`) 
+    axios.post<SuccessResult>(`http://localhost:8000/api/posts/${post.id}/like/${user.id}/`) 
       .then((res) => {
         //setPostLikeResult(res.data.message);
         if(res.data.message) {
@@ -56,12 +57,12 @@ const PostBar: React.FC<UserPostBarProps> = ({ post, userid }) => {
     if (commentTrimmed !== "") {
       axios.post<SuccessResult>(`http://localhost:8000/api/posts/${post.id}/comment/`, {
         content: commentTrimmed,
-        user: userid, // Assuming you want to associate the comment with the current user
+        user: user.id,
       })
         .then((res) => {
-          // Assuming you want to update the comment list after submitting
+          // Update the comment list after submitting
           fetchPostComments();
-          // You may want to clear the comment input after submission
+          // Clear the comment input after submission
           setNewComment("");
         })
         .catch((err) => console.log(err));
@@ -81,6 +82,18 @@ const PostBar: React.FC<UserPostBarProps> = ({ post, userid }) => {
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(event.target.value);
   };
+
+  const renderComments = () => {
+    return (
+        <div>
+            {postComments.map((c,idx) => 
+                <div key={idx}>
+                    <Comment comment={c} user={user} />
+                </div>
+            )}
+        </div>
+    )
+  }
 
   const renderPostBar = () => {
     return (
@@ -113,23 +126,7 @@ const PostBar: React.FC<UserPostBarProps> = ({ post, userid }) => {
                 </button>
             </div>
             <div className={styles.comments}>
-                {postComments.map((comment, index) => (
-                    <div key={index}>
-                        Put in a box. Make own component.
-                        User: {comment.user}<br/>
-                        Content: {comment.content}<br/>
-                        time: {comment.timestamp}<br/>
-                        <i 
-                            /*className={`bi me-2 ${styles.likePostButton} 
-                                    ${commentIsLikedByUser ? 
-                                        `bi-heart-fill ${styles.likedPostHeart}` : 
-                                        "bi-heart"}`} 
-                            onClick={handleLikeClick}*/
-                        >
-                        </i>
-                        {comment.num_likes}
-                    </div>
-                ))}
+                {renderComments()}
             </div>
         </div>
     );

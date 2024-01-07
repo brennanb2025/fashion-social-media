@@ -40,10 +40,11 @@ Items
 
 Comments
 /api/comments/: GET
-/api/comments/:id/: GET
+/api/comments/:id/: GET, POST
+/api/comments/:id/like/:userid/: GET, POST
 /api/comments/:id/comment/: POST
-/api/comments/:id/like/: POST
-/api/comments/:id/comments/: GET
+/api/comments/:id/children/: GET
+/api/comments/:id/num_children/: GET --> Deleted, putting num_children inside comment serializer.
 
 
 
@@ -121,10 +122,7 @@ urlpatterns = [
     #comments
     path('api/comments/', views.comments, name='comments'),
     path('api/comments/<int:id>/', views.comment_detail, name='comment_detail'),
-    path('api/comments/<int:id>/comments/', views.comment_comments, name='comment_comments'),
+    path('api/comments/<int:id>/children/', views.comment_children, name='comment_children'),
+    #path('api/comments/<int:id>/num_children/', views.comment_num_children, name='comment_num_children'),
     path('api/comments/<int:id>/like/<int:userid>/', views.comment_like, name='comment_like'),
-    path('api/comments/<int:id>/comment/<int:userid>/<int:postid>/', 
-        views.post_comment,  #TODO: Change
-        name='post_comment'
-    ),
 ]

@@ -9,11 +9,12 @@ export type UserPost =  {
 }
   
 export interface UserPostProps {
-    usePost: UserPost,
+    user: User,
+    post: UserPost,
 }
 
 export type UserPostGridProps = {
-    id: number
+    user: User,
 };
 
 export type Item = {
@@ -50,19 +51,32 @@ export type PostComment = {
     timestamp: string, 
     content: string, 
     num_likes: number,
+    num_children: number,
+}
+
+export interface CommentProps {
+    comment: PostComment,
+    user: User,
 }
 
 export type PostNumLikes = {
     num_likes: number,
 }
 
+export type CommentNumChildren = {
+    num_children: number,
+}
+
 export type PostLikedByUserStatus = {
+    status: boolean,
+}
+export type CommentLikedByUserStatus = {
     status: boolean,
 }
 
 
 export interface ImageCarouselProps {
-    userPost: UserPost;
+    post: UserPost;
 }
 
 export interface MarkerProps {
@@ -70,7 +84,8 @@ export interface MarkerProps {
     y: number;
 }
 
+import { User } from './User';
 export interface UserPostBarProps {
     post: UserPost;
-    userid: number;
+    user: User;
 }

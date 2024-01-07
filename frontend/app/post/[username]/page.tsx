@@ -7,7 +7,7 @@ import { Navbar } from '../../components/Navbar'
 
 import axios from 'axios';
 
-export default function Post({ params }: { params: { username: string } }) {
+export default function MakePost({ params }: { params: { username: string } }) {
 
     // const user: User = {
     //     id: 1,
@@ -37,7 +37,7 @@ export default function Post({ params }: { params: { username: string } }) {
     return (
         <div>
             <Navbar />
-            {user ? <MakePostCard id={ user.id } /> : "User not found" }
+            {user ? <MakePostCard user={ user } /> : "User not found" }
         </div>
     )
 }

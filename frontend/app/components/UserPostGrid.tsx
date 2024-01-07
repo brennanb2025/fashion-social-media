@@ -4,14 +4,15 @@ import axios from 'axios';
 import { UserPost, UserPostBarProps, UserPostGridProps } from '../types/UserPost';
 import PostImageCarousel from './PostImageCarousel';
 import PostBar from './PostBar';
+import Post from './Post';
 import styles from '../styles/userPostGrid.module.css'
 
-const UserPostGrid: React.FC<UserPostGridProps> = ({ id }) => {
+const UserPostGrid: React.FC<UserPostGridProps> = ({ user }) => {
   const [userPosts, setUserPosts] = useState<UserPost[]>([]);
 
   const fetchUserPosts = () => {
     // Assuming you have an API endpoint to fetch user posts
-    axios.get<UserPost[]>(`http://localhost:8000/api/users/${id}/posts-full/`)
+    axios.get<UserPost[]>(`http://localhost:8000/api/users/${user.id}/posts-full/`)
       .then((res) => setUserPosts(res.data))
       .catch((err) => console.log(err));
   };
@@ -22,16 +23,8 @@ const UserPostGrid: React.FC<UserPostGridProps> = ({ id }) => {
 
   const renderUserPosts = () => {
     return userPosts.map((post) => (
-      <div key={post.id} className={styles.post}>
-        <div className={`card ${styles.card}`}>
-          <div className={`card-body ${styles.cardBody}`}>
-            <h5 className={`card-title ${styles.cardTitle}`}>{post.title}</h5>
-            <PostImageCarousel userPost={post} />
-            <h5 className={styles.cardCaption}>{post.caption}</h5>
-            <h5 className={styles.cardTimestamp}>{post.timestamp}</h5>
-            <PostBar post={post} userid={id} />
-          </div>
-        </div>
+      <div key={post.id}>
+        <Post post={ post } user={ user } />
       </div>
     ));
   };

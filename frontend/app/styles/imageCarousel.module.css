@@ -1,9 +1,13 @@
+.carouselContainer {
+    border: 1px solid blue;
+    height: 400px; /* Set a fixed height for the container */
+}
+
 .carouselImage {
     width: 100%;
-    /*height: 400px;*/
+    height: 100%;
     object-fit: cover; /* Ensure the image covers the entire container */
     object-position: center center; /* Center the image horizontally and vertically */
-
     margin: auto;
 }
 
@@ -20,6 +24,7 @@
 }
 
 .mediaItems {
+    height: 100%;
     display: grid;
     grid-template-columns: 1fr; /* Single column layout for mediaItems */
     gap: 10px; /* Adjust as needed for spacing between rows */
@@ -27,26 +32,27 @@
 }
 
 .mediaCol {
-    /*border: 1px solid black;*/
+    height: 100%;
+    border: 1px solid black;
     flex: 1; /* Equal width for both columns */
     margin: 5px;
 }
 
 .itemsCol {
-    /*border: 1px solid black;*/
-    visibility: hidden;
+    border: 1px solid red;
+    /* visibility: hidden; */
     padding-left:5px;
-    flex: 1; /* Equal width for both columns */
+    flex: 0; /* Equal width for both columns */
     margin: 5px;
     width: 0;
     opacity: 0; /* Initially hide the marker */
-    transition: opacity 0.3s visibility 0.3s ease, width 0.3s; /* Add a transition for opacity */
+    transition: opacity 0.3s, flex 0.3s, width 0.3s; /* Add a transition for opacity */
 }
 
 .hovered .itemsCol {
-    width: auto;
+    flex: 1;
     opacity: 1;
-    visibility: visible;
+    /* visibility: visible; */
 }
 
 .markerInvisibleDummy {
@@ -75,17 +81,17 @@
     opacity: 0; /* Initially hide the marker */
     transition: opacity 0.3s; /* Add a transition for opacity */
 }
-.hovered .marker {
+/*.hovered*/.showMarkers .marker {
     opacity: 1;
 }
-.hovered .markerInner {
+/*.hovered*/.showMarkers .markerInner {
     opacity: 1;
 }
 .arrow {
     opacity: 0;
     transition: opacity 0.3s; /* Add a transition for opacity */
 }
-.hovered .arrow {
+/*.hovered*/.showMarkers .arrow {
     opacity: 1;
 }
 
@@ -100,6 +106,7 @@
 }
 
 .mediaRow {
+    height: 100%;
     display: flex;
     justify-content: space-between;
 }

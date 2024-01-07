@@ -7,7 +7,7 @@ import ImageCarousel from './PostImageCarousel';
 import styles from '../styles/userPostGrid.module.css'
 
 //TODO: could change it to pass the whole user
-const MakePostCard: React.FC<UserPostGridProps> = ({ id }) => {
+const MakePostCard: React.FC<UserPostGridProps> = ({ user }) => {
   const [userPosts, setUserPosts] = useState<UserPost[]>([]);
 
   const renderUserPosts = () => {

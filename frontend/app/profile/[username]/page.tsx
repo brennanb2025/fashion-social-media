@@ -30,6 +30,8 @@ export default function Profile({ params }: { params: { username: string } }) {
         .catch((err) => console.log(err));
     };
 
+    console.log(user);
+
     useEffect(() => {
         fetchUser();
     }, []);

@@ -9,6 +9,7 @@
 
 .likePostButton:hover {
     cursor: pointer;
+    color: #f576ee;
 }
 
 .likedPostHeart {
