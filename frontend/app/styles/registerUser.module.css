@@ -1,0 +1,64 @@
+.borderContainer {
+    width: 60%;
+    margin: 0 auto;
+    border: 2px solid rgb(70, 70, 70);
+    border-radius: 30px;
+}
+
+.row {
+    height: 100px;
+}
+
+.registerForm {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.registerLabel {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.registerInput {
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.registerButton {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.registerButton:hover {
+    background-color: #555;
+}
+
+.registerInput.error {
+    border-color: red;
+    transition: background-color 0.5s;
+}
+.registerError.error {
+    background-color: rgb(249, 192, 192);
+    transition: background-color 0.5s;
+}
+.registerInput.valid {
+    border-color: green;
+}
+
+.errorMessage {
+    color: red;
+    margin-top: 5px;
+}
+
+.loginErrorMessage {
+    color: red;
+}

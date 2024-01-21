@@ -77,7 +77,6 @@ const PostImageCarousel: React.FC<ImageCarouselProps> = ({ post }) => {
       const rect = itemRow.getBoundingClientRect();
 
       const midPoint = (rect.top + rect.bottom)/2
-      console.log(midPoint, containerRect.bottom, containerRect.top);
 
       // Check if the itemRow is outside the container
       if (
@@ -177,23 +176,6 @@ const PostImageCarousel: React.FC<ImageCarouselProps> = ({ post }) => {
                                         <Link href={`/search-item/${mediaItem.item.id}`}>
                                             <i className="bi bi-search me-2"></i>
                                         </Link>
-                                        fkdlsljfldslkjf
-                                        dsffdsfds
-                                        sdfsdfdsf
-                                        sdfsdfdsfds
-                                        sfdsfdfdsdsfds
-                                        fkdlsljfldslkjfsdfsdffd
-                                        sdfdsfsdfsdfdsf
-                                        q3erwerwqrewrqw
-                                        rqwerwqrqwrwqerewr
-                                        qwerewqrew
-                                        dsfdsf24323242
-                                        23432432432
-                                        4324324324
-                                        324324324324
-                                        32432432423
-
-                                            
                                         <a href={mediaItem.link}>
                                             {mediaItem.item.brand} {mediaItem.item.title} in {mediaItem.colorway}<br/>
                                             (size {mediaItem.size})<br/>

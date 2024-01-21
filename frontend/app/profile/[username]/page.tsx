@@ -8,7 +8,13 @@ import { Navbar } from '../../components/Navbar'
 import axios from 'axios';
 
 export default function Profile({ params }: { params: { username: string } }) {
+    const [loggedInUser, setLoggedInUser] = useState<string>();
 
+    useEffect(() => {
+        if(sessionStorage.getItem('username') !== null) {  // already logged in
+            setLoggedInUser(sessionStorage.getItem('username')!);
+        }
+    }, []);
     // const user: User = {
     //     id: 1,
     //     username: 'testUsername',
@@ -16,7 +22,7 @@ export default function Profile({ params }: { params: { username: string } }) {
     //     first_name: 'testFirst',
     //     last_name: 'testLast',
     //     bio: 'biooo',
-    //     height: "5'11",
+    //     height: 165
     //     weight: 150,
     //     profile_picture: 'todo',
     //     is_active: true,
@@ -29,8 +35,6 @@ export default function Profile({ params }: { params: { username: string } }) {
         .then((res) => setUser(res.data))
         .catch((err) => console.log(err));
     };
-
-    console.log(user);
 
     useEffect(() => {
         fetchUser();

@@ -4,6 +4,9 @@ from core import views
 """ 
 Users
 /api/users/: GET, POST
+/api/users/validate-email/:email/: GET
+/api/users/validate-username/:username/: GET
+# these are for register validation, so they don't have to return a whole user
 /api/users/:id/: GET
 /api/users/:username/: GET
 /api/users/:id/followers/: GET
@@ -17,6 +20,7 @@ Users
 /api/users/:id/main/: GET
 /api/users/:id/follow-recommendations/: GET
 /api/users/:id/set-profile-picture/: POST
+/api/users/logout/: POST
 
 Follows
 /api/follows/: GET
@@ -55,6 +59,16 @@ urlpatterns = [
     #users
     path('api/users/', views.users, name='users'),
     path('api/users/<int:id>/', views.user_detail, name='user_detail'),
+    path(
+        'api/users/validate-email/<str:email>/', 
+        views.user_register_validate_email, 
+        name='user_register_validate_email'
+    ),
+    path(
+        'api/users/validate-username/<str:username>/', 
+        views.user_register_validate_username, 
+        name='user_register_validate_username'
+    ),
     path('api/users/<str:username>/', views.user_detail_by_username, name='user_detail_by_username'),
     path('api/users/<int:id>/followers/', views.user_followers, name='user_followers'),
     path('api/users/<int:id>/following/', views.user_following, name='user_following'),
@@ -91,6 +105,7 @@ urlpatterns = [
         views.set_profile_picture,
         name='set-profile-picture'
     ),
+    path('api/logout/', views.logout, name='logout'), # deletes refresh token
 
     
     #follows

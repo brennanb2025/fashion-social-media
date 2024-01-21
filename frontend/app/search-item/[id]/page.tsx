@@ -40,7 +40,9 @@ export default function SearchItem({ params }: { params: { id: number } }) {
 
   const renderPosts = () => {
     return posts.map((post) => (
-      <Post user={ user } post={ post } />
+      <div key={post.id}>
+        <Post user={ user } post={ post } />
+      </div>
     ));
   };
 

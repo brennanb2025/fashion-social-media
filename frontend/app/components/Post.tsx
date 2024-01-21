@@ -7,6 +7,7 @@ import PostImageCarousel from './PostImageCarousel';
 import PostBar from './PostBar';
 
 const Post: React.FC<UserPostProps> = ({ user, post }) => {
+  user.profile_picture = "https://fsm-app-bucket.s3.amazonaws.com/post_media/1/434be55b-6052-4e14-a15e-95dcf01b39c7";
   return (
     <div key={`post-${post.id}`} className={styles.post}>
         <div className={`card ${styles.card}`}>

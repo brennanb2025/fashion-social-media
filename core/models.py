@@ -46,8 +46,8 @@ def file_generate_upload_path_profile_picture(instance, filename): #instance = a
 class CustomUser(AbstractUser):
     email = models.EmailField(max_length=70,blank=True,unique=True)
     bio = models.CharField(max_length=200, blank=True, default='')
-    height = models.CharField(max_length=10, null=True) #optional
-    weight = models.PositiveSmallIntegerField(null=True) #optional
+    height = models.PositiveSmallIntegerField(null=True) # cm, optional
+    weight = models.PositiveSmallIntegerField(null=True) # optional
 
     #posts = relationship("Posts", back_populates="owner")
 

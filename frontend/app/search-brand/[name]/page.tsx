@@ -40,7 +40,9 @@ export default function SearchBrand({ params }: { params: { name: string } }) {
 
   const renderPosts = () => {
     return posts.map((post) => (
-      <Post post={ post } user={ user } />
+        <div key={`post-${post.id}`}>
+            <Post post={ post } user={ user } />
+        </div>
     ));
   };
 

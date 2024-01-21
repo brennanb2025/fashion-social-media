@@ -19,10 +19,7 @@ const Comment: React.FC<CommentProps> = ({ comment, user }) => {
   };
   const fetchCommentUserLiked = () => { //TODO: userid
     axios.get<CommentLikedByUserStatus>(`http://localhost:8000/api/comments/${comment.id}/like/${1}/`)
-      .then((res) => {
-        console.log(res.data);
-        setCommentIsLikedByUser(res.data.status)
-      })
+      .then((res) => setCommentIsLikedByUser(res.data.status))
       .catch((err) => console.log(err));
   }
 

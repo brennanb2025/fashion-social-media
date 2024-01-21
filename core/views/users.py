@@ -1,7 +1,9 @@
 from rest_framework import status#, permissions, viewsets
 
 from core.serializers import CustomUserSerializer, PostSerializer, PostSerializerFull
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 from django.http.response import JsonResponse
@@ -29,32 +31,70 @@ def users(request):
         # 'safe=False' for objects serialization
 
     elif request.method == 'POST':
-        first = request.POST.get('first')
-        last = request.POST.get('last')
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
+        data = json.loads(request.body)
+
+        first = data.get('first')
+        last = data.get('last')
+        username = data.get('username')
+        email = data.get('email')
+        password1 = data.get('password1')
+        password2 = data.get('password2')
 
 
-        if first is None:
-            return JsonResponse({'message': 'First name query parameter unset'}, status=status.HTTP_400_BAD_REQUEST)
-        if last is None:
-            return JsonResponse({'message': 'Last name query parameter unset'}, status=status.HTTP_400_BAD_REQUEST)
-        if username is None:
-            return JsonResponse({'message': 'Username query parameter unset'}, status=status.HTTP_400_BAD_REQUEST)
-        if email is None:
-            return JsonResponse({'message': 'Email query parameter unset'}, status=status.HTTP_400_BAD_REQUEST)
-        if password1 is None:
-            return JsonResponse({'message': 'Password query parameter unset'}, status=status.HTTP_400_BAD_REQUEST)
-        if password2 is None:
-            return JsonResponse({'message': 'Password repeat query parameter unset'}, status=status.HTTP_400_BAD_REQUEST)
+        if first is None or first == "":
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'First name query parameter unset'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if last is None or last == "":
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'Last name query parameter unset'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if username is None or username == "":
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'Username query parameter unset'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if email is None or email == "":
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'Email query parameter unset'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if password1 is None or password1 == "":
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'Password query parameter unset'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        if password2 is None or password2 == "":
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'Password repeat query parameter unset'
+                }, status=status.HTTP_400_BAD_REQUEST)
         if password1 != password2:
-            return JsonResponse({'message': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'Passwords do not match'
+                }, status=status.HTTP_400_BAD_REQUEST)
         if CustomUser.objects.filter(username=username).exists():
-            return JsonResponse({'message': 'Username taken'}, status=status.HTTP_409_CONFLICT)
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'Username taken'
+                }, status=status.HTTP_409_CONFLICT)
         if CustomUser.objects.filter(email=email).exists():
-            return JsonResponse({'message': 'Email taken'}, status=status.HTTP_409_CONFLICT)
+            return JsonResponse(
+                {
+                    'status': 'failure',
+                    'message': 'Email taken'
+                }, status=status.HTTP_409_CONFLICT)
 
         user = create_user(
                 email=email, 
@@ -63,7 +103,11 @@ def users(request):
                 first=first,
                 last=last)
 
-        return JsonResponse({'message': str(user.id)}, status=status.HTTP_201_CREATED)
+        return JsonResponse(
+            {
+                'status': 'success',
+                'message': '' # str(user.id)
+            }, status=status.HTTP_201_CREATED)
         
 def create_user(email, username, password, first, last):
     user = get_user_model().objects.create_user(
@@ -101,6 +145,26 @@ def user_detail(request, id):
     if request.method == 'GET': 
         userSerializer = CustomUserSerializer(user) 
         return JsonResponse(userSerializer.data, status=status.HTTP_200_OK) 
+
+
+@api_view(['GET'])
+def user_register_validate_username(request, username):
+    user = CustomUser.objects.filter(username=username).first()
+    
+    return JsonResponse(
+        {
+            "valid": user is None
+        }, status=status.HTTP_200_OK) 
+
+@api_view(['GET'])
+def user_register_validate_email(request, email):
+    user = CustomUser.objects.filter(email=email).first()
+    
+    return JsonResponse(
+        {
+            "valid": user is None
+        }, status=status.HTTP_200_OK) 
+
 
 @api_view(['GET'])
 def user_detail_by_username(request, username):
@@ -141,6 +205,7 @@ def user_following(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def user_follow_another_user(request, id1, id2):
     if id1 == id2:
         return JsonResponse({'message': 'User cannot follow themself'}, status=status.HTTP_400_BAD_REQUEST)
@@ -157,7 +222,9 @@ def user_follow_another_user(request, id1, id2):
         Follow.objects.create(follower=user1, followed=user2)
         return JsonResponse({'success':True}, status=status.HTTP_201_CREATED)
 
+
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def user_unfollow_another_user(request, id1, id2):
     # POST user 1 follows user 2
     if request.method == 'DELETE':
@@ -287,8 +354,8 @@ def validate_post_json_data(data):
 
     return True
 
-
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def user_posts(request, id):
     # GET posts id has posted, POST a post under user id
 
@@ -297,6 +364,8 @@ def user_posts(request, id):
     if user is None:
         return JsonResponse({'message': 'The user does not exist'}, status=status.HTTP_404_NOT_FOUND) 
 
+
+    # TODO: remove this?
     if request.method == 'GET':
         postSerializer = PostSerializer(user.posts.all().order_by('-timestamp'), many=True)
         return JsonResponse(postSerializer.data, safe=False, status=status.HTTP_200_OK)
@@ -393,6 +462,7 @@ def user_liked_posts(request, id):
 FEED_POST_LIMIT = 20 # get next 20 posts
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def feed(request, id):
     # GET feed for id
 
@@ -425,6 +495,7 @@ def feed(request, id):
 MAIN_POST_LIMIT = 20 # get next 20 posts
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def main(request, id):
     # GET main (recommended posts) for id
     # for now, just show the most popular posts
@@ -460,6 +531,7 @@ def main(request, id):
 RECOMMENDED_USER_LIMIT = 100 # get next 100 recommended users
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def follow_recommendations(request, id):
     # GET recommended followers for id
     # this is a network problem - but for now simplify it by only going 1 layer down.
@@ -498,6 +570,7 @@ def follow_recommendations(request, id):
 """
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def set_profile_picture(request, id):
     #POST a profile picture for userid
 
@@ -520,3 +593,17 @@ def set_profile_picture(request, id):
         user.profile_picture = imgFile
 
         return JsonResponse(data={'message': 'success'}, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout(request):
+
+    try:
+        data = json.loads(request.body)
+
+        refresh_token = data["refresh_token"]
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        return JsonResponse(data={'message': 'success'}, status=status.HTTP_205_RESET_CONTENT)
+    except Exception as e:
+        return JsonResponse(data={'message': 'failure'}, status=status.HTTP_400_BAD_REQUEST)
