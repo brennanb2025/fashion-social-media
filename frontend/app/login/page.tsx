@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import styles from '@/app/styles/registerUser.module.css';
 import { UserLoginData, LoginUserResult, User } from '../types/User';
 
-export default function Register() {
+export default function Login() {
   const [username, setUsername] = useState<string>("");
   const [usernameError, setUsernameError] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -65,11 +65,11 @@ export default function Register() {
       .then(response => {
         // Handle successful registration (redirect, show a success message, etc.)
         sessionStorage.clear();
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
         sessionStorage.setItem('access_token', response.data.access);
         sessionStorage.setItem('refresh_token', response.data.refresh);
         sessionStorage.setItem('username', username);
         fetchUser(username);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
         router.push(`/profile/${username}`); // nav to profile page
       })
       .catch(error => {
@@ -83,7 +83,10 @@ export default function Register() {
 
   const fetchUser = (username:string) => {
     axios.get<User>(`http://localhost:8000/api/users/${username}/`)
-    .then((res) => sessionStorage.setItem('id', res.data.id.toString()))
+    .then((res) => {
+        sessionStorage.setItem('id', res.data.id.toString());
+        sessionStorage.setItem('profile_picture', res.data.profile_picture);
+    })
     .catch((err) => console.log(err));
   };
 

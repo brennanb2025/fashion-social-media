@@ -1,0 +1,39 @@
+.followInfoContainer {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+}
+
+/*.followInfoContainer .profilePicture {
+    margin-right: 10px;
+}*/
+
+.userInfoContainer {
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 5px; /* Add rounded edges */
+    padding: 10px; /* Add padding for spacing */
+}
+
+.profilePictureContainer {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+}
+  
+.profilePicture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.colCenterButton {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.followButton {
+    width: 70px;
+    height: 40px;
+}

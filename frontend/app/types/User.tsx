@@ -13,6 +13,7 @@ export type User = {
   
 export interface UserProps {
     user: User,
+    loggedInUser: User | undefined,
 }
 
 export type ValidateUsernameResult = {
@@ -55,4 +56,8 @@ export type UserLoginData = {
 export type LoginUserResult = {
     refresh: string,
     access: string,
+};
+
+export type FollowUserResult = {
+    message: string;
 };

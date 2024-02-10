@@ -8,11 +8,11 @@ import { Navbar } from '../../components/Navbar'
 import axios from 'axios';
 
 export default function Profile({ params }: { params: { username: string } }) {
-    const [loggedInUser, setLoggedInUser] = useState<string>();
+    const [loggedInUser, setLoggedInUser] = useState<User>();
 
     useEffect(() => {
         if(sessionStorage.getItem('username') !== null) {  // already logged in
-            setLoggedInUser(sessionStorage.getItem('username')!);
+            fetchLoggedInUser(sessionStorage.getItem('username')!);
         }
     }, []);
     // const user: User = {
@@ -36,6 +36,12 @@ export default function Profile({ params }: { params: { username: string } }) {
         .catch((err) => console.log(err));
     };
 
+    const fetchLoggedInUser = (username:string) => {
+        axios.get<User>(`http://localhost:8000/api/users/${username}/`)
+        .then((res) => setLoggedInUser(res.data))
+        .catch((err) => console.log(err));
+    };
+
     useEffect(() => {
         fetchUser();
     }, []);
@@ -43,7 +49,7 @@ export default function Profile({ params }: { params: { username: string } }) {
     return (
         <div>
             <Navbar />
-            {user ? <ProfileCard user={user} /> : "User not found" }
+            {user ? <ProfileCard user={user} loggedInUser={loggedInUser} /> : "User not found" }
         </div>
     )
 }

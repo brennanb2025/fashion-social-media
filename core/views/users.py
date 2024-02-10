@@ -217,10 +217,10 @@ def user_follow_another_user(request, id1, id2):
             return JsonResponse({'message': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
         if Follow.objects.filter(follower=user1, followed=user2).first() != None:
-            return JsonResponse({'message': 'Follow already exists'}, status=status.HTTP_409_CONFLICT)
+            return JsonResponse({'message': 'You are already following ' + user2.username + '!'}, status=status.HTTP_409_CONFLICT)
         
         Follow.objects.create(follower=user1, followed=user2)
-        return JsonResponse({'success':True}, status=status.HTTP_201_CREATED)
+        return JsonResponse({'message':'success'}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['DELETE'])

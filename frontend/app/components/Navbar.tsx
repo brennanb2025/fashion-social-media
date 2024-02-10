@@ -7,10 +7,12 @@ import { useState, useEffect } from 'react';
 export const Navbar = () => {
 
     const [loggedInUser, setLoggedInUser] = useState<string>('');
+    const [profilePicture, setProfilePicture] = useState<string>('');
 
     useEffect(() => {
         if(sessionStorage.getItem('username') !== null) {  // already logged in
             setLoggedInUser(sessionStorage.getItem('username')!);
+            setProfilePicture(sessionStorage.getItem('profile_picture')!);
         }
     }, []);
     
@@ -43,7 +45,7 @@ export const Navbar = () => {
                 </Link> :
                 <div>
                     <Link href={`/profile/${loggedInUser}`}>
-                        Profile
+                        <img className={styles.profilePicture} src={profilePicture} alt="Profile" />
                     </Link>
                     <Link href={`/logout`}>
                         Logout

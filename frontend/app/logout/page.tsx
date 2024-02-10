@@ -17,6 +17,7 @@ export default function Logout() {
         axios.defaults.headers.common['Authorization'] = null;
         router.push('/');
     } else {
+        sessionStorage.clear(); // clear regardless
         logoutUser();
     }
   }, []);

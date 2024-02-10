@@ -12,6 +12,9 @@ const nextConfig = {
         ]
     },
     trailingSlash: process.env.NODE_ENV !== 'production' && true,
+    images: {
+        domains: ['fsm-app-bucket.s3.amazonaws.com'],
+    },
 }
 
 module.exports = nextConfig
